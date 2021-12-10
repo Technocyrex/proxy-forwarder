@@ -78,7 +78,7 @@ class Client:
                 .split(b'uthorization: Basic ', 1)[1] \
                 .split(b'\n', 1)[0] \
                 .strip()).decode().split(":", 1)
-            auth_info[0] = int(auth_info[0]) \
+            auth_info[0] = (int(auth_info[0]) % len(proxy_list)) \
                            if auth_info[0].isdigit() else None
         
         if AUTH_KEY:
