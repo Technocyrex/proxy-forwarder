@@ -1,6 +1,6 @@
 # proxy-forwarder
  
-A proxy server primarily meant for evading IP restrictions on a mass amount of proxies.
+A proxy server primarily meant for evading IP restrictions on a mass amount of HTTP proxies.
 
 # Setup
 1. Create a file named `proxies.txt` and fill it with your `HTTP` proxies.
