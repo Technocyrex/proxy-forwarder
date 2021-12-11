@@ -75,8 +75,8 @@ class Client:
         auth_info = None
         if b"uthorization: Basic " in request:
             auth_info = b64decode(request \
-                .split(b'uthorization: Basic ', 1)[1] \
-                .split(b'\n', 1)[0] \
+                .split(b"uthorization: Basic ", 1)[1] \
+                .split(b"\n", 1)[0] \
                 .strip()).decode().split(":", 1)
             auth_info[0] = (int(auth_info[0]) % len(proxy_list)) \
                            if auth_info[0].isdigit() else None
