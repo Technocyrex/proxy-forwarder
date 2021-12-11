@@ -94,7 +94,8 @@ class Client:
         port = int(port) if port else 80
         host_addr = (hostname, port)
 
-        proxy_index = auth_info[0] or next(proxy_counter)
+        proxy_index = auth_info[0] \
+                      if auth_info[0] is not None else next(proxy_counter)
         proxy_addr = proxy_list[proxy_index]
 
         self._setup_proxy(host_addr, proxy_addr)
