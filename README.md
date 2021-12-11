@@ -14,7 +14,7 @@ import requests
 
 #        proxy number       auth key
 #                   v              v
-proxy_url = "http://1:proxysecret123@127.0.0.1:5407"
+proxy_url = "http://0:proxysecret123@127.0.0.1:5407"
 
 resp = requests.get(
     url="https://api.ipify.org/?format=json",
