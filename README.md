@@ -12,7 +12,7 @@ HTTP proxy pool server primarily meant for evading IP whitelists.
 ```python
 import requests
 
-#        proxy number       auth key
+#         proxy index       auth key
 #                   v              v
 proxy_url = "http://0:proxysecret123@127.0.0.1:5407"
 
