@@ -85,7 +85,6 @@ class Client:
             if not auth_info:
                 self.close(code=403, msg="Auth key is missing")
                 return
-            
             if auth_info[1] != AUTH_KEY:
                 self.close(code=403, msg="Auth key is invalid")
                 return
