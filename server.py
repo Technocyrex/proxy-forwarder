@@ -148,7 +148,7 @@ def worker_func(server_sock: socket.socket):
 
 if __name__ == "__main__":
     server_sock = socket.socket()
-    server_sock.bind(("0.0.0.0", 5407))
+    server_sock.bind(("0.0.0.0", PORT_NUM))
     server_sock.listen()
 
     workers = [
