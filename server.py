@@ -8,7 +8,8 @@ AUTH_KEY = "proxysecret123"
 PORT_NUM = 5407
 BLOCK_SIZE = 1024 ** 2
 CLIENT_TIMEOUT = 60
-PROXY_TIMEOUT = 60
+PROXY_CONNECT_TIMEOUT = 5
+PROXY_READ_TIMEOUT = 60
 WORKER_COUNT = 64
 THREAD_COUNT = 25
 
@@ -18,7 +19,8 @@ proxy_counter = count()
 with open("proxies.txt", encoding="UTF-8", errors="ignore") as fp:
     for line in fp:
         addr, port = line.split(":", 1)
-        proxy_list.append((addr, int(port)))
+        proxy_list.append((addr.lower(), int(port)))
+    proxy_list = list(set(proxy_list))
 
 class Client:
     _sock: socket.socket
@@ -53,8 +55,9 @@ class Client:
 
     def _setup_proxy(self, host_addr, proxy_addr):
         self._proxy_sock = socket.socket()
-        self._proxy_sock.settimeout(PROXY_TIMEOUT)
+        self._proxy_sock.settimeout(PROXY_CONNECT_TIMEOUT)
         self._proxy_sock.connect(proxy_addr)
+        self._proxy_sock.settimeout(PROXY_READ_TIMEOUT)
         self._proxy_sock.send((
             f"CONNECT {host_addr[0]}:{host_addr[1]} HTTP/1.1\r\n"
             f"\r\n"
@@ -64,7 +67,8 @@ class Client:
 
         if not (response.startswith(b"HTTP/1.1 200") or
                 response.startswith(b"HTTP/1.0 200")):
-            raise Exception("Invalid CONNECT response from proxy server.")
+            raise Exception(
+                "Invalid CONNECT response from proxy server.")
             
     def process_connect_request(self):
         request = self._sock.recv(4096)
@@ -95,7 +99,8 @@ class Client:
         host_addr = (hostname, port)
 
         proxy_index = auth_info[0] \
-                      if auth_info[0] is not None else next(proxy_counter)
+                      if not auth_info or auth_info[0] is not None \
+                      else next(proxy_counter)
         proxy_addr = proxy_list[proxy_index]
 
         self._setup_proxy(host_addr, proxy_addr)
