@@ -1,8 +1,17 @@
 from server import PORT_NUM, AUTH_KEY
-import requests
+from http.client import HTTPSConnection
 
-ip = requests.get("https://api.ipify.org?format=json").json()["ip"]
+def get_ip():
+    conn = HTTPSConnection("api.ipify.org")
+    try:
+        conn.request("GET", "/?format=text")
+        resp = conn.getresponse()
+        ip = resp.read().decode().strip()
+        return ip
+    finally:
+        conn.close()
 
+ip = get_ip()
 with open("proxies.txt") as fp:
     proxy_count = len(fp.read().splitlines())
 
