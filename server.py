@@ -37,7 +37,7 @@ class Client:
 
     def _add_thread(self, fn):
         thread = threading.Thread(
-            target=self._server_chunk_forwarder)
+            target=fn)
         thread.start()
         self._threads.append(thread)
 
